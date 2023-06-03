@@ -7,14 +7,49 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { api } from '@/utils/api'
 import { Session } from 'next-auth'
 import { Button } from './ui/button'
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
+import { Switch } from './ui/switch'
+import { useToast } from './ui/use-toast'
 
 
-const MeetingCard: React.FC<{
+const PostCard: React.FC<{
     post: inferProcedureOutput<AppRouter["post"]["findOne"]>
+    isDrafts: boolean
     sessionData: Session
-}> = ({ post, sessionData }) => {
+}> = ({ post, sessionData, isDrafts }) => {
+    const { toast } = useToast()
+    if (!post) {
+        return null
+    }
+    const [checked, setChecked] = React.useState<boolean>(post?.published)
 
-    const  { mutate } = api.post.delete.useMutation()
+    const makePublic = api.post.updatePublished.useMutation({
+        onSuccess: () => {
+            toast({
+                title: "Success",
+                description: "your post has successfully updated"
+            })
+        },
+        onError: (error) => {
+            toast({
+                title: "Error",
+                description: "Look like there was an error"
+            })
+        }
+
+
+
+    })
+
+
+    function onChange() {
+        setChecked(true);
+        makePublic.mutate({
+            id: String(post?.id),
+            published: true
+        });
+    }
+    const { mutate } = api.post.delete.useMutation()
 
     if (!post) {
         return null
@@ -26,31 +61,56 @@ const MeetingCard: React.FC<{
         })
     }
     return (
-        <Card>
-            <CardHeader>
-                <div className="flex justify-between">
+        <div className="py-5">
 
-                    <CardTitle>{post?.title}</CardTitle>
+            <Card>
+                <CardHeader>
+                    <div className="flex justify-between">
+                        <Avatar>
+                            <AvatarImage src={String(post?.user?.image)} />
+                            <AvatarFallback>{post?.user?.name[0]}</AvatarFallback>
+                        </Avatar>
 
-                </div>
-            </CardHeader>
-            <CardContent>
-                <CardDescription>
-                </CardDescription>
-            </CardContent>
-            <CardFooter>
+                        <CardTitle className='text-3xl'>{post?.title}</CardTitle>
+
+                    </div>
+                </CardHeader>
+                <CardContent>
+
+                </CardContent>
                 {
+
                     sessionData.user.id === post?.userId ? (
-                        <Button
-                            onClick={() => onDelete()}
-                        > Delete </Button>
+                        <CardFooter>
+                            <div className="flex justify-between">
+                                <Button
+                                    onClick={() => onDelete()}
+                                > Delete </Button>
+
+                                {
+                                    isDrafts ? (
+
+                                        <Switch
+                                            checked={checked}
+                                            onCheckedChange={onChange}
+                                        />
+
+
+                                    ) : null
+                                }
+                            </div>
+
+
+                        </CardFooter>
+
                     ) : null
+
+
                 }
-            </CardFooter>
 
-        </Card>
-
+            </Card>
+        </div>
     )
 }
 
-export default MeetingCard
+export default PostCard

@@ -25,7 +25,7 @@ import { OurFileRouter } from '@/server/uploadthing'
 import { UploadButton } from '@uploadthing/react'
 import { api } from '@/utils/api'
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
+import { Card, CardHeader } from '@/components/ui/card'
 import { HoverCard, HoverCardTrigger } from '@/components/ui/hover-card'
 import { HoverCardContent } from '@radix-ui/react-hover-card'
 import { useSession } from 'next-auth/react'
@@ -52,17 +52,21 @@ const Create = () => {
 
     const { mutate } = api.post.create.useMutation({
         onSuccess: () => {
-            toast({
-                    title: "Success",
-                    description: "your post has successfully created"
+            setImage([])
+            setCanUpload(false)
 
-                })
+
+            toast({
+                title: "Success",
+                description: "your post has successfully created"
+
+            })
         },
         onError: (error) => {
             toast({
-                    title: "Error",
-                    description: "Look like there was an error"
-                })
+                title: "Error",
+                description: "Look like there was an error"
+            })
         }
     })
 
@@ -81,6 +85,7 @@ const Create = () => {
         })
     }
 
+
     return (
         <div>
             {
@@ -89,6 +94,9 @@ const Create = () => {
                 sessionData?.user ? (
                     <div className='p-20'>
                         <Card className='p-5'>
+                            <CardHeader>
+                                <h1 className="text-5xl font-bold">Create </h1>
+                            </CardHeader>
                             <Form {...form}>
                                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                                     <FormField
@@ -152,20 +160,26 @@ const Create = () => {
                                             // Do something with the response
                                             const urls = res?.map((file) => file.fileUrl) as string[];
                                             setImage(urls)
-
                                             setCanUpload(true)
+                                            toast({
+                                                title: `success`,
+                                                description: `image uploaded you can now create a post`
+                                            })
                                         }}
                                         onUploadError={(error: Error) => {
                                             // Do something with the error.
-                                            alert(`ERROR! ${error.message}`);
+                                            toast({
+                                                title: `error`,
+                                                description: error.message
+                                            })
                                         }}
                                     />
-
 
 
                                     {
                                         canUpload ? (
                                             <Button className='w-full' type="submit">Submit</Button>
+
                                         ) : (
                                             <HoverCard>
 
@@ -200,8 +214,8 @@ const Create = () => {
                 ) : (
                     <div>
                         {
-                                // TODO
-                            }
+                            // TODO
+                        }
                     </div>
                 )
             }
