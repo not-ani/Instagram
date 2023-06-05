@@ -25,6 +25,9 @@ model Post {
     comments  Comment[]
     likes     Like[]
     image     String[]
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt @default(now())
+
 }
 
 model Comment {
@@ -42,6 +45,11 @@ model Like {
     postId String?
     user   User?   @relation(fields: [userId], references: [id])
     userId String?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt @default(now())
+
+   @@unique([postId, userId])
 }
 
 // Necessary for Next auth
