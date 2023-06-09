@@ -12,9 +12,7 @@ datasource db {
     // Further reading:
     // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
     // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
-  url = env("DATABASE_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
-  shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
+    url      = env("DATABASE_URL")
 }
 
 model Post {
@@ -28,8 +26,7 @@ model Post {
     likes     Like[]
     image     String[]
     createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt @default(now())
-
+    updatedAt DateTime  @default(now()) @updatedAt
 }
 
 model Comment {
@@ -40,8 +37,8 @@ model Comment {
     user    User?   @relation(fields: [userId], references: [id])
     userId  String?
 
-    createdAt DateTime @default(now()) 
-    updatedAt DateTime @updatedAt @default(now()) 
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Like {
@@ -52,9 +49,9 @@ model Like {
     userId String?
 
     createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
 
-   @@unique([postId, userId])
+    @@unique([postId, userId])
 }
 
 // Necessary for Next auth
@@ -98,7 +95,7 @@ model User {
     Followers     User[]    @relation("FollowRelation")
     Following     User[]    @relation("FollowRelation")
     createdAt     DateTime  @default(now())
-    updatedAt     DateTime  @updatedAt @default(now())
+    updatedAt     DateTime  @default(now()) @updatedAt
 }
 
 model VerificationToken {
