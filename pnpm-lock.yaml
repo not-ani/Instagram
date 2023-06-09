@@ -30,6 +30,7 @@ specifiers:
   autoprefixer: ^10.4.14
   class-variance-authority: ^0.6.0
   clsx: ^1.2.1
+  embla-carousel-react: 8.0.0-rc07
   eslint: ^8.40.0
   eslint-config-next: ^13.4.2
   formik: ^2.3.2
@@ -75,6 +76,7 @@ dependencies:
   '@uploadthing/react': 3.0.5_zzzmhnuuqqadacqehiplytj27e
   class-variance-authority: 0.6.0_typescript@5.1.3
   clsx: 1.2.1
+  embla-carousel-react: 8.0.0-rc07_react@18.2.0
   formik: 2.4.1_react@18.2.0
   lucide-react: 0.221.0_react@18.2.0
   next: 13.4.4_biqbaboplfbrettd7655fr4n2y
@@ -2096,6 +2098,28 @@ packages:
   /electron-to-chromium/1.4.420:
     resolution: {integrity: sha512-BpPy2KXZc+UPbI8NGo2QdHU1Mkq11pO/zaNDHY57L09K/0ytrPw+IiLOUvZ1NjI5BlAVF5DkNr1UBUS76Tc4ow==}
     dev: true
+
+  /embla-carousel-react/8.0.0-rc07_react@18.2.0:
+    resolution: {integrity: sha512-8JX2kIMTbqHvsG6O0XRUHdZJ/66kyKCwFwFVZXZ1YpdrdMlrMHBNyIQP+ETBWgOsNtpbcBeWyZx29YtzCVLgJA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.1 || ^18.0.0
+    dependencies:
+      embla-carousel: 8.0.0-rc07
+      embla-carousel-reactive-utils: 8.0.0-rc07_embla-carousel@8.0.0-rc07
+      react: 18.2.0
+    dev: false
+
+  /embla-carousel-reactive-utils/8.0.0-rc07_embla-carousel@8.0.0-rc07:
+    resolution: {integrity: sha512-MfdReTR3p0GTcUqLY0DNF5mkYRHF/pler9yBUjRjjjBb1OTQjcFedXYhoCDO49009x/IPM00kcbQQuEtJWpQRQ==}
+    peerDependencies:
+      embla-carousel: 8.0.0-rc07
+    dependencies:
+      embla-carousel: 8.0.0-rc07
+    dev: false
+
+  /embla-carousel/8.0.0-rc07:
+    resolution: {integrity: sha512-IdGbZH042gRT0/3dOCbiv45jOt5E7jpM4h25VzyJujule/3GitJ1/Ib3U/X83auiI3aojKoBe13e1g5g7bwnjg==}
+    dev: false
 
   /emoji-regex/8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}

@@ -1,7 +1,6 @@
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { z } from "zod";
 
-
 /**
 model Post {
     id        String    @id @default(cuid())
@@ -15,11 +14,7 @@ model Post {
 }
 */
 
-
-
-
 export const postRouter = createTRPCRouter({
-
     like: protectedProcedure
         .input(
             z.object({
@@ -45,7 +40,6 @@ export const postRouter = createTRPCRouter({
                 // For example, you could throw an error, or simply return the existing 'like'.
                 throw new Error("You've already liked this post.");
             }
-
 
             return prisma.like.create({
                 data: {
@@ -82,17 +76,21 @@ export const postRouter = createTRPCRouter({
             });
         }),
     deleteMany: protectedProcedure
-        .input(z.object({
-            where: z.object({
-                userId: z.string().optional(),
-                published: z.boolean().optional()
-            }).optional(),
-        }))
+        .input(
+            z.object({
+                where: z
+                    .object({
+                        userId: z.string().optional(),
+                        published: z.boolean().optional(),
+                    })
+                    .optional(),
+            })
+        )
         .mutation(async ({ ctx, input }) => {
             const { where } = input;
             const posts = await ctx.prisma.post.deleteMany({
-                where: where
-            })
+                where: where,
+            });
             return posts;
         }),
     timeline: publicProcedure
@@ -100,10 +98,11 @@ export const postRouter = createTRPCRouter({
             z.object({
                 cursor: z.string().nullish(),
                 limit: z.number().min(1).max(100).default(10),
-                where: z.object({
-                    published: z.boolean().optional(),
-
-                }).optional(),
+                where: z
+                    .object({
+                        published: z.boolean().optional(),
+                    })
+                    .optional(),
             })
         )
         .query(async ({ ctx, input }) => {
@@ -131,7 +130,21 @@ export const postRouter = createTRPCRouter({
                     _count: {
                         select: {
                             likes: true,
+                            comments: true,
                         },
+                    },
+                    // include the latest comment
+                    comments: {
+                        include: {
+                            user: {
+                                select: {
+                                    name: true,
+                                    image: true,
+                                    id: true,
+                                },
+                            },
+                        },
+                        take: 1,
                     },
                 },
             });
@@ -139,7 +152,7 @@ export const postRouter = createTRPCRouter({
             let nextCursor: typeof cursor | undefined = undefined;
 
             if (posts.length > limit) {
-                const nextItem = posts.pop() as typeof posts[number];
+                const nextItem = posts.pop() as (typeof posts)[number];
 
                 nextCursor = nextItem.id;
             }
@@ -150,45 +163,48 @@ export const postRouter = createTRPCRouter({
             };
         }),
     updatePublished: protectedProcedure
-        .input(z.object({
-            id: z.string(),
-            published: z.boolean()
-        }))
+        .input(
+            z.object({
+                id: z.string(),
+                published: z.boolean(),
+            })
+        )
         .mutation(async ({ ctx, input }) => {
             const post = await ctx.prisma.post.update({
                 where: {
-                    id: input.id
+                    id: input.id,
                 },
                 data: {
-                    published: input.published
-                }
-            })
+                    published: input.published,
+                },
+            });
             return post;
         }),
 
     delete: protectedProcedure
-        .input(z.object({
-            id: z.string()
-        }))
+        .input(
+            z.object({
+                id: z.string(),
+            })
+        )
         .mutation(async ({ ctx, input }) => {
             const post = await ctx.prisma.post.delete({
                 where: {
-                    id: input.id
-                }
-            })
+                    id: input.id,
+                },
+            });
             return post;
         }),
 
-
     create: protectedProcedure
-        .input(z.object({
-            title: z.string(),
-            content: z.string().nullish(),
-            published: z.boolean(),
-            image: z.string().array()
-
-
-        }))
+        .input(
+            z.object({
+                title: z.string(),
+                content: z.string().nullish(),
+                published: z.boolean(),
+                image: z.string().array(),
+            })
+        )
         .mutation(async ({ ctx, input }) => {
             const post = await ctx.prisma.post.create({
                 data: {
@@ -197,61 +213,66 @@ export const postRouter = createTRPCRouter({
                     published: input.published,
                     user: {
                         connect: {
-                            id: ctx.session?.user.id
-                        }
+                            id: ctx.session?.user.id,
+                        },
                     },
-                    image: input.image
-                }
-            })
+                    image: input.image,
+                },
+            });
 
             return post;
         }),
 
     update: protectedProcedure
-        .input(z.object({
-            id: z.string(),
-            title: z.string(),
-            content: z.string(),
-            published: z.boolean(),
-            image: z.string()
-        }))
+        .input(
+            z.object({
+                id: z.string(),
+                title: z.string(),
+                content: z.string(),
+                published: z.boolean(),
+                image: z.string(),
+            })
+        )
         .mutation(async ({ ctx, input }) => {
             const post = await ctx.prisma.post.update({
                 where: {
-                    id: input.id
+                    id: input.id,
                 },
                 data: {
                     title: input.title,
                     content: input.content,
                     published: input.published,
-                    image: input.image
-                }
-            })
+                    image: input.image,
+                },
+            });
 
             return post;
         }),
     findOne: publicProcedure
-        .input(z.object({
-            id: z.string(),
-            include: z.object({
-                user: z.boolean().optional(),
-                comments: z.boolean().optional(),
-                likes: z.boolean().optional()
-            }).optional()
-        }))
+        .input(
+            z.object({
+                id: z.string(),
+                include: z
+                    .object({
+                        user: z.boolean().optional(),
+                        comments: z.boolean().optional(),
+                        likes: z.boolean().optional(),
+                    })
+                    .optional(),
+            })
+        )
         .query(async ({ ctx, input }) => {
             const post = await ctx.prisma.post.findUnique({
                 where: {
-                    id: input.id
+                    id: input.id,
                 },
                 include: {
                     user: true,
-                }
-            })
+                },
+            });
 
             return post;
         }),
-
 
     findUnPublished: protectedProcedure
         .input(
@@ -271,12 +292,11 @@ export const postRouter = createTRPCRouter({
                 skip: skip,
                 cursor: cursor ? { id: cursor } : undefined,
                 orderBy: {
-                    id: 'desc',
+                    id: "desc",
                 },
                 where: {
                     published: false,
-                    userId: userId
-
+                    userId: userId,
                 },
             });
             let nextCursor: typeof cursor | undefined = undefined;
@@ -291,26 +311,31 @@ export const postRouter = createTRPCRouter({
         }),
 
     findMany: publicProcedure
-        .input(z.object({
-            skip: z.number().optional(),
-            take: z.number().optional(),
-            cursor: z.object({
-                id: z.string().optional()
-            }).optional(),
-            where: z.object({
-                published: z.boolean().optional(),
-                authorId: z.string().optional(),
-            }).optional(),
-        }))
+        .input(
+            z.object({
+                skip: z.number().optional(),
+                take: z.number().optional(),
+                cursor: z
+                    .object({
+                        id: z.string().optional(),
+                    })
+                    .optional(),
+                where: z
+                    .object({
+                        published: z.boolean().optional(),
+                        authorId: z.string().optional(),
+                    })
+                    .optional(),
+            })
+        )
         .query(async ({ ctx, input }) => {
             const posts = await ctx.prisma.post.findMany({
                 skip: input.skip,
                 take: input.take,
                 cursor: input.cursor,
                 where: input.where,
-            })
+            });
 
             return posts;
-        })
-
-})
+        }),
+});
