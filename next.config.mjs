@@ -9,9 +9,6 @@ const config = {
   experimental: {
     esmExternals: false,
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   reactStrictMode: true,
 
   images: {
