@@ -1,19 +1,18 @@
-import { api } from '@/utils/api'
-import { useRouter } from 'next/router'
-import React from 'react'
+"use client";
+import { api } from "@/utils/api";
+import { useRouter } from "next/router";
+import React from "react";
 
 const Index = () => {
-  const router = useRouter()
-  const { id } = router.query
-  !id && router.push('/profile')
+  const router = useRouter();
+  const { id } = router.query;
+  if (!id) {
+    return null;
+  }
 
   // const data = api.user
 
-  return (
-    <div>
+  return <div></div>;
+};
 
-    </div>
-  )
-}
-
-export default Index
+export default Index;

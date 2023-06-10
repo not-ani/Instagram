@@ -6,7 +6,7 @@ const Home: NextPage = () => {
   const router = useRouter();
   const { data: sessionData } = useSession();
   if (sessionData?.user) {
-    router.push("/feed");
+    return null;
   }
   return <AuthShowcase />;
 };

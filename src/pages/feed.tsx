@@ -139,6 +139,7 @@ const Post = React.memo(function Post({
   const likeMutation = api.post.like.useMutation({
     onSuccess: (data, variables) => {
       const userId = data.userId as string;
+      //@ts-ignore
       updateCache({ client, data: userId, variables, input, action: "like" });
       toast({
         title: "Liked",
@@ -150,6 +151,7 @@ const Post = React.memo(function Post({
   const unlikeMutation = api.post.unlike.useMutation({
     onSuccess: (data, variables) => {
       const userId = data.userId as string;
+      //@ts-ignore
       updateCache({ client, data: userId, variables, input, action: "unlike" });
       toast({
         title: "Unliked",

@@ -49,7 +49,7 @@ const Activity = () => {
             <div className="flex flex-row items-center justify-center gap-2">
               <Avatar>
                 <AvatarImage>{activity.user?.image}</AvatarImage>
-                <AvatarFallback>{activity.user?.name[0]}</AvatarFallback>
+                <AvatarFallback>{activity.user?.name}</AvatarFallback>
               </Avatar>
               <p>{activity.user?.name}</p>
               <p>like your post</p>
@@ -63,7 +63,7 @@ const Activity = () => {
             <div className="flex flex-row items-center justify-center gap-2">
               <Avatar>
                 <AvatarImage>{activity.user?.image}</AvatarImage>
-                <AvatarFallback>{activity.user?.name[0]}</AvatarFallback>
+                <AvatarFallback>{activity.user?.name}</AvatarFallback>
               </Avatar>
               <p>{activity.user?.name}</p>
               <p>commented on your post</p>
