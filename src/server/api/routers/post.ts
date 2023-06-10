@@ -109,7 +109,6 @@ export const postRouter = createTRPCRouter({
             const { prisma } = ctx;
             const { cursor, limit } = input;
 
-            const userId = ctx.session?.user?.id;
 
             const posts = await prisma.post.findMany({
                 take: limit + 1,

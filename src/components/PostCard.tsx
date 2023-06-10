@@ -1,16 +1,15 @@
 import React from "react";
-import { inferProcedureOutput } from "@trpc/server";
+import { type inferProcedureOutput } from "@trpc/server";
 import type { AppRouter } from "../server/api/root";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "./ui/card";
 import { api } from "@/utils/api";
-import { Session } from "next-auth";
+import { type Session } from "next-auth";
 import { Button } from "./ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Switch } from "./ui/switch";
@@ -22,10 +21,12 @@ const PostCard: React.FC<{
   sessionData: Session;
 }> = ({ post, sessionData, isDrafts }) => {
   const { toast } = useToast();
+  const [checked, setChecked] = React.useState<boolean>(
+    post?.published as boolean
+  );
   if (!post) {
     return null;
   }
-  const [checked, setChecked] = React.useState<boolean>(post?.published);
 
   const makePublic = api.post.updatePublished.useMutation({
     onSuccess: () => {
@@ -34,7 +35,7 @@ const PostCard: React.FC<{
         description: "your post has successfully updated",
       });
     },
-    onError: (error) => {
+    onError: () => {
       toast({
         title: "Error",
         description: "Look like there was an error",

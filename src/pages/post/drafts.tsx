@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
 import PostCard from "@/components/PostCard";
 import { Button } from "@/components/ui/button";
@@ -23,7 +24,7 @@ const Drafts = () => {
         description: "all your drafts has been deleted",
       });
     },
-    onError: (error) => {
+    onError: () => {
       toast({
         title: "Error",
         description: "Look like there was an error",
@@ -43,7 +44,9 @@ const Drafts = () => {
     );
 
   const handleFetchNextPage = () => {
-    fetchNextPage();
+    fetchNextPage().catch((error) => {
+      console.log(error);
+    });
     setPage((prev) => prev + 1);
   };
 

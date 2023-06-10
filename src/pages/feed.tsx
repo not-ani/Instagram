@@ -1,8 +1,8 @@
-import { RouterInputs, RouterOutputs, api } from "@/utils/api";
+import { type RouterInputs, type RouterOutputs, api } from "@/utils/api";
 import Image from "next/image";
 import {
-  InfiniteData,
-  QueryClient,
+  type InfiniteData,
+  type QueryClient,
   useQueryClient,
 } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
@@ -10,17 +10,9 @@ import Link from "next/link";
 import {
   MessageCircle,
   MoreHorizontalIcon,
-  MoreVertical,
-  MoreVerticalIcon,
   ThumbsUpIcon,
 } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar } from "@/components/ui/avatar";
 import { useToast } from "@/components/ui/use-toast";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import useEmblaCarousel from "embla-carousel-react";
@@ -133,12 +125,13 @@ const Post = React.memo(function Post({
 }) {
   const { toast } = useToast();
 
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false });
+  const [emblaRef] = useEmblaCarousel({ loop: false });
   const [likeCount, setLikeCount] = useState(post._count.likes);
   const [isLiked, setIsLiked] = useState(false);
   const likeMutation = api.post.like.useMutation({
     onSuccess: (data, variables) => {
       const userId = data.userId as string;
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
       updateCache({ client, data: userId, variables, input, action: "like" });
       toast({
@@ -151,6 +144,7 @@ const Post = React.memo(function Post({
   const unlikeMutation = api.post.unlike.useMutation({
     onSuccess: (data, variables) => {
       const userId = data.userId as string;
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
       updateCache({ client, data: userId, variables, input, action: "unlike" });
       toast({
@@ -167,12 +161,12 @@ const Post = React.memo(function Post({
     setLikeCount(likeCount + (hasLiked ? -1 : 1));
 
     if (isLiked) {
-      unlikeMutation({ postId });
+      unlikeMutation({ postId }).catch(() => { console.log("error") });
       setIsLiked(false);
       return;
     }
 
-    likeMutation({ postId });
+    likeMutation({ postId }).catch(() => { console.log("error") });
     setIsLiked(true);
   };
   return (
@@ -183,7 +177,7 @@ const Post = React.memo(function Post({
             <Avatar>
               <Image
                 src={post.user?.image}
-                alt={`${post.user?.name} profile picture`}
+                alt={`${post.user?.name as string} profile picture`}
                 width={48}
                 height={48}
                 className="rounded-full"
@@ -206,7 +200,7 @@ const Post = React.memo(function Post({
         <div className="flex">
           {post.image.map((src, index) => (
             <div className="relative w-full" key={index}>
-              <img
+              <Image
                 src={src}
                 alt={`Slide ${index}`}
                 className="w-full object-cover"
@@ -273,7 +267,7 @@ export function Timeline({
 
   useEffect(() => {
     if (scrollPosition > 90 && hasNextPage && !isFetching) {
-      fetchNextPage();
+      fetchNextPage().catch((error) => { console.log(error) });
     }
   }, [scrollPosition, hasNextPage, isFetching, fetchNextPage]);
   return (

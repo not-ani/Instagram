@@ -1,6 +1,6 @@
  import React from "react"
 import Link from "next/link"
-import { User } from "next-auth"
+import { type User } from "next-auth"
 
 import { cn } from "@/lib/utils"
 

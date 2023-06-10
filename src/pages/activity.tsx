@@ -1,6 +1,6 @@
+"use client";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Image from "next/image";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { api } from "@/utils/api";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
@@ -38,7 +38,7 @@ const Activity = () => {
   });
 
   if (!sessionData?.user) {
-    signIn();
+    signIn().catch((err) => console.log(err));
   }
   return (
     <div className="flex flex-col items-center justify-center gap-2">
@@ -46,28 +46,34 @@ const Activity = () => {
       {activity.map((activity) => {
         if (activity.type === "like") {
           return (
-            <div className="flex flex-row items-center justify-center gap-2">
+            <div
+              key={activity.id}
+              className="flex flex-row items-center justify-center gap-2"
+            >
               <Avatar>
                 <AvatarImage>{activity.user?.image}</AvatarImage>
                 <AvatarFallback>{activity.user?.name}</AvatarFallback>
               </Avatar>
               <p>{activity.user?.name}</p>
               <p>like your post</p>
-              <Link href={`/posts/${activity.post?.id}`}>
+              <Link href={`/posts/${activity.post?.id as string}`}>
                 <p>{activity.post?.title}</p>
               </Link>
             </div>
           );
         } else {
           return (
-            <div className="flex flex-row items-center justify-center gap-2">
+            <div
+              key={activity.id}
+              className="flex flex-row items-center justify-center gap-2"
+            >
               <Avatar>
                 <AvatarImage>{activity.user?.image}</AvatarImage>
                 <AvatarFallback>{activity.user?.name}</AvatarFallback>
               </Avatar>
               <p>{activity.user?.name}</p>
               <p>commented on your post</p>
-              <Link href={`/posts/${activity.post?.id}`}>
+              <Link href={`/posts/${activity.post?.id as string}`}>
                 <p>{activity.post?.title}</p>
               </Link>
             </div>

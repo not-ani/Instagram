@@ -1,18 +1,4 @@
-/**
- * 
-model Post {
-    id        String    @id @default(cuid())
-    title     String
-    content   String?
-    published Boolean   @default(false)
-    user      User?     @relation(fields: [userId], references: [id])
-    userId    String?
-    comments  Comment[]
-    likes     Like[]
-    image String?
-}
-
-*/
+import Image from "next/image";
 import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -29,7 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { OurFileRouter } from "@/server/uploadthing";
+import { type OurFileRouter } from "@/server/uploadthing";
 import { UploadButton } from "@uploadthing/react";
 import { api } from "@/utils/api";
 import { Button } from "@/components/ui/button";
@@ -66,7 +52,7 @@ const Create = () => {
         description: "your post has successfully created",
       });
     },
-    onError: (error) => {
+    onError: () => {
       toast({
         title: "Error",
         description: "Look like there was an error",
@@ -98,6 +84,7 @@ const Create = () => {
             </CardHeader>
             <Form {...form}>
               <form
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-8"
               >
@@ -162,6 +149,7 @@ const Create = () => {
                     setImage((prevImage) => [...prevImage, ...urls]);
                     setCanUpload(true);
 
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     //@ts-ignore
                     emblaApi.reInit();
                     console.log(image);
@@ -183,7 +171,7 @@ const Create = () => {
                   <div className="flex">
                     {image.map((src, index) => (
                       <div className="relative w-full" key={index}>
-                        <img
+                        <Image
                           src={src}
                           alt={`Slide ${index}`}
                           className="w-full object-cover"
@@ -213,7 +201,7 @@ const Create = () => {
                         </Avatar>
                         <div className="space-y-1">
                           <h4 className="text-sm font-semibold">
-                            You can't make a post yet
+                            <p>You cannot make a post yet</p>
                           </h4>
                           <p className="text-sm">
                             You must upload an image before you can make a post.

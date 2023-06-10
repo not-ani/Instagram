@@ -1,14 +1,13 @@
 /** server/uploadthing.ts */
 import { createUploadthing, type FileRouter } from "uploadthing/next-legacy";
 import { getServerAuthSession } from "./auth";
-import { NextApiRequest, NextApiResponse } from "next";
+import { type NextApiRequest, type NextApiResponse } from "next";
 const f = createUploadthing();
 
 function auth(req: NextApiRequest, res: NextApiResponse) {
     const session = getServerAuthSession({ req, res });
     return session;
-
-};
+}
 
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
@@ -19,16 +18,16 @@ export const ourFileRouter = {
         .maxSize("32MB")
         .middleware(async (req, res) => {
             // This code runs on your server before upload
-            let session = await auth(req, res);
+            const session = await auth(req, res);
             const user = session?.user;
-
 
             // If you throw, the user will not be able to upload
             if (!user) throw new Error("Unauthorized");
 
             // Whatever is returned here is accessible in onUploadComplete as `metadata`
-            return { userId: user.id};
+            return { userId: user.id };
         })
+        // eslint-disable-next-line @typescript-eslint/require-await
         .onUploadComplete(async ({ metadata, file }) => {
             // This code RUNS ON YOUR SERVER after upload
             console.log("Upload complete for userId:", metadata.userId);
