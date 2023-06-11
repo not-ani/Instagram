@@ -150,25 +150,30 @@ const Post = React.memo(function Post({
   return (
     <div className="flex flex-col p-10 ">
       <div className="flex items-center justify-between">
-        <div className="flex items-center">
-          {post.user?.image && (
-            <Avatar>
-              <Image
-                src={post.user?.image}
-                alt={`${post.user?.name as string} profile picture`}
-                width={48}
-                height={48}
-                className="rounded-full"
-              />
-            </Avatar>
-          )}
-          <div className="ml-2">
-            <div className="flex items-center">
-              <p className="font-bold">{post.user?.name}</p>
-              <p className="pl-1 text-xs text-gray-500">{}</p>
+        <Link href={`/profile/${post.user?.id}`}>
+
+
+          <div className="flex items-center">
+            {post.user?.image && (
+              <Avatar>
+                <Image
+                  src={post.user?.image}
+                  alt={`${post.user?.name as string} profile picture`}
+                  width={48}
+                  height={48}
+                  className="rounded-full"
+                />
+              </Avatar>
+            )}
+            <div className="ml-2">
+              <div className="flex items-center">
+                <p className="font-bold">{post.user?.name}</p>
+                <p className="pl-1 text-xs text-gray-500">{}</p>
+              </div>
             </div>
           </div>
-        </div>
+
+        </Link>
         <div className="flex items-center">
           <MoreHorizontalIcon size="1.5rem" />
         </div>
