@@ -50,11 +50,13 @@ const Activity = () => {
               key={activity.id}
               className="flex flex-row items-center justify-center gap-2"
             >
-              <Avatar>
-                <AvatarImage>{activity.user?.image}</AvatarImage>
-                <AvatarFallback>{activity.user?.name}</AvatarFallback>
-              </Avatar>
-              <p>{activity.user?.name}</p>
+              <Link href={`/profile/${activity.user?.id as string}`}>
+                <Avatar>
+                  <AvatarImage>{activity.user?.image}</AvatarImage>
+                  <AvatarFallback>{activity.user?.name}</AvatarFallback>
+                </Avatar>
+                <p>{activity.user?.name}</p>
+              </Link>
               <p>like your post</p>
               <Link href={`/posts/${activity.post?.id as string}`}>
                 <p>{activity.post?.title}</p>

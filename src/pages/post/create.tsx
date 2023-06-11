@@ -171,7 +171,7 @@ const Create = () => {
                   <div className="flex">
                     {image.map((src, index) => (
                       <div className="relative w-full" key={index}>
-                        <Image
+                        <img
                           src={src}
                           alt={`Slide ${index}`}
                           className="w-full object-cover"

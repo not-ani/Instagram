@@ -7,40 +7,14 @@ import {
 } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import {
-  MessageCircle,
-  MoreHorizontalIcon,
-  ThumbsUpIcon,
-} from "lucide-react";
+import { MessageCircle, MoreHorizontalIcon, ThumbsUpIcon } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 import { useToast } from "@/components/ui/use-toast";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import useEmblaCarousel from "embla-carousel-react";
+import { useScrollPosition } from "@/utils/hooks";
 
-function useScrollPosition() {
-  const [scrollPosition, setScrollPosition] = useState(0);
 
-  const handleScroll = () => {
-    const height =
-      document.documentElement.scrollHeight -
-      document.documentElement.clientHeight;
-    const winScroll =
-      document.body.scrollTop || document.documentElement.scrollTop;
-
-    const scrolled = (winScroll / height) * 100;
-    setScrollPosition(scrolled);
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  return scrollPosition;
-}
 
 const LIMIT = 6;
 
@@ -161,12 +135,16 @@ const Post = React.memo(function Post({
     setLikeCount(likeCount + (hasLiked ? -1 : 1));
 
     if (isLiked) {
-      unlikeMutation({ postId }).catch(() => { console.log("error") });
+      unlikeMutation({ postId }).catch(() => {
+        console.log("error");
+      });
       setIsLiked(false);
       return;
     }
 
-    likeMutation({ postId }).catch(() => { console.log("error") });
+    likeMutation({ postId }).catch(() => {
+      console.log("error");
+    });
     setIsLiked(true);
   };
   return (
@@ -200,7 +178,7 @@ const Post = React.memo(function Post({
         <div className="flex">
           {post.image.map((src, index) => (
             <div className="relative w-full" key={index}>
-              <Image
+              <img
                 src={src}
                 alt={`Slide ${index}`}
                 className="w-full object-cover"
@@ -267,7 +245,9 @@ export function Timeline({
 
   useEffect(() => {
     if (scrollPosition > 90 && hasNextPage && !isFetching) {
-      fetchNextPage().catch((error) => { console.log(error) });
+      fetchNextPage().catch((error) => {
+        console.log(error);
+      });
     }
   }, [scrollPosition, hasNextPage, isFetching, fetchNextPage]);
   return (

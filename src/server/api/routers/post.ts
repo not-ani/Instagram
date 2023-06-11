@@ -109,7 +109,6 @@ export const postRouter = createTRPCRouter({
             const { prisma } = ctx;
             const { cursor, limit } = input;
 
-
             const posts = await prisma.post.findMany({
                 take: limit + 1,
                 cursor: cursor ? { id: cursor } : undefined,
@@ -265,11 +264,20 @@ export const postRouter = createTRPCRouter({
                 where: {
                     id: input.id,
                 },
-                include: {
-                    user: true,
+                select: {
+                    id: true,
+                    title: true,
+                    content: true,
+                    published: true,
+                    image: true,
+                    user: true, // This selects the related user
+                    likes: true, // This selects the related likes
+                    comments: true,
+                    _count: {
+                        select: { likes: true, comments: true },
+                    },
                 },
             });
-
             return post;
         }),
 
