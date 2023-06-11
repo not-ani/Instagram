@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
-import PostCard from "@/components/PostCard";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -76,14 +75,6 @@ const Drafts = () => {
           </div>
         </CardHeader>
         <CardContent className="p-5">
-          {data?.pages[page]?.items.map((post) => (
-            <PostCard
-              isDrafts={true}
-              post={post}
-              sessionData={sessionData}
-              key={post.id}
-            />
-          ))}
         </CardContent>
         <CardFooter className="justify-between">
           <Button
