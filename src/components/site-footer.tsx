@@ -4,6 +4,7 @@ import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
 import { Button } from "./ui/button";
+import Switcher from "./Color";
 
 export const SiteFooter = () => {
     const { data: sessionData } = useSession();
@@ -12,9 +13,7 @@ export const SiteFooter = () => {
             <Link href="/feed">
                 <Home />
             </Link>
-            <Link href="/search">
-                <Search />
-            </Link>
+            <Switcher />
 
             <Link href="/post/create">
                 <PlusSquare />
