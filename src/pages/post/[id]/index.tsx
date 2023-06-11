@@ -118,7 +118,6 @@ const Post = React.memo(function Post({
           {post?.comments.map((comment) => (
             <div key={comment.id}>
               <p>{comment.content}</p>
-              <p>{comment.user?.name}</p>
             </div>
           ))}
         </p>
@@ -141,7 +140,9 @@ const Index = () => {
     return null;
   }
 
-  return <div></div>;
+  return <div>
+    <Post post={post.data} />
+  </div>;
 };
 
 export default Index;

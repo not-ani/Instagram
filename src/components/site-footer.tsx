@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import { Heart, Home, PlusSquare, Search, User } from "lucide-react";
+import { Heart, Home, PlusSquare, User } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";

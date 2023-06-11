@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { type RouterInputs, type RouterOutputs, api } from "@/utils/api";
 import Image from "next/image";
 import {
@@ -150,7 +151,7 @@ const Post = React.memo(function Post({
   return (
     <div className="flex flex-col p-10 ">
       <div className="flex items-center justify-between">
-        <Link href={`/profile/${post.user?.id}`}>
+        <Link href={`/profile/${post.user?.id as string}`}>
 
 
           <div className="flex items-center">

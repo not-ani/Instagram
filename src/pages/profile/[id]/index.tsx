@@ -2,7 +2,6 @@
 import Image from "next/image";
 import { api } from "@/utils/api";
 import { useScrollPosition } from "@/utils/hooks";
-import { useQueryClient } from "@tanstack/react-query";
 import { Menu } from "lucide-react";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
@@ -31,7 +30,6 @@ const Index = () => {
       }
     );
 
-  const client = useQueryClient();
 
   const images = data?.pages.flatMap((page) => page.posts) ?? [];
 
