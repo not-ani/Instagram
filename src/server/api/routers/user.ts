@@ -87,7 +87,20 @@ const userRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const user = await ctx.prisma.user.findUnique({
         where: input.where,
+        select: {
+          id: true,
+          name: true,
+          image: true,
+          _count: {
+            select: {
+              posts: true,
+              likes: true,
+              comments: true,
+            },
+          },
+        },
       });
+
       return user;
     }),
   findAllImages: publicProcedure

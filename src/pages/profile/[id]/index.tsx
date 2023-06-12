@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
-const LIMIT = 20;
+const LIMIT = 12;
 
 const Index = () => {
   const router = useRouter();
@@ -47,7 +47,7 @@ const Index = () => {
       <div className="flex justify-around">
         <div></div>
         <h4 className="text-2xl font-bold">{user.data?.name}</h4>
-        <Menu size={32} />
+        <Menu size={28} />
       </div>
       <div className="flex items-center justify-around gap-2 py-5 sm:gap-10 ">
         <Avatar className="h-20 w-20 sm:h-32 sm:w-32">
@@ -55,16 +55,16 @@ const Index = () => {
           <AvatarFallback>{user.data?.name}</AvatarFallback>
         </Avatar>
         <div className="flex flex-col">
-          <h3 className="text-2xl font-bold">{12}</h3>
-          <p>123</p>
+          <h3 className="font-bold">Posts</h3>
+          <p>{user.data?._count.posts}</p>
         </div>
         <div className="flex flex-col">
-          <h3 className="text-2xl font-bold">{12}</h3>
-          <p>123</p>
+          <h3 className="font-bold">Likes</h3>
+          <p>{user.data?._count.likes}</p>
         </div>
         <div className="flex flex-col">
-          <h3 className="text-2xl font-bold">{12}</h3>
-          <p>123</p>
+          <h3 className="font-bold">Comments</h3>
+          <p>{user.data?._count.comments}</p>
         </div>
       </div>
       <div className="flex flex-col justify-around px-10">
