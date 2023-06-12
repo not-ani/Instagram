@@ -77,10 +77,6 @@ function updateCache({
         };
       });
 
-      console.log(`
-                this  ${value}
-            `);
-
       return {
         ...newData,
         pages: newTweets,
