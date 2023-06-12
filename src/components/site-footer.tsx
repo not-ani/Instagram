@@ -12,7 +12,6 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 
@@ -20,7 +19,7 @@ export const SiteFooter = () => {
   const { data: sessionData } = useSession();
   return (
     <footer className="fixed bottom-0 left-0 flex w-screen justify-evenly bg-background py-5">
-      <Link href="/feed">
+      <Link href="/">
         <Home />
       </Link>
       <Switcher />
