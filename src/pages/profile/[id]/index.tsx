@@ -5,6 +5,8 @@ import { useScrollPosition } from "@/utils/hooks";
 import { Menu } from "lucide-react";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Link from "next/link";
 const LIMIT = 20;
 
 const Index = () => {
@@ -30,7 +32,6 @@ const Index = () => {
       }
     );
 
-
   const images = data?.pages.flatMap((page) => page.posts) ?? [];
 
   useEffect(() => {
@@ -48,9 +49,32 @@ const Index = () => {
         <h4 className="text-2xl font-bold">{user.data?.name}</h4>
         <Menu size={32} />
       </div>
-      <div></div>
-
-      <div className="grid grid-cols-3 gap-1  p-20 sm:grid-cols-5 md:grid-cols-6">
+      <div className="flex items-center justify-around gap-2 py-5 sm:gap-10 ">
+        <Avatar className="h-20 w-20 sm:h-32 sm:w-32">
+          <AvatarImage>{user.data?.image}</AvatarImage>
+          <AvatarFallback>{user.data?.name}</AvatarFallback>
+        </Avatar>
+        <div className="flex flex-col">
+          <h3 className="text-2xl font-bold">{12}</h3>
+          <p>123</p>
+        </div>
+        <div className="flex flex-col">
+          <h3 className="text-2xl font-bold">{12}</h3>
+          <p>123</p>
+        </div>
+        <div className="flex flex-col">
+          <h3 className="text-2xl font-bold">{12}</h3>
+          <p>123</p>
+        </div>
+      </div>
+      <div className="flex flex-col justify-around px-10">
+        <p className="font-bold">{user.data?.name}</p>
+        <p>
+          Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint
+          cillum sint consectetur cupidatat.
+        </p>
+      </div>
+      <div className="grid grid-cols-3 gap-1  px-10 py-20 sm:grid-cols-5 md:grid-cols-6">
         {images.map((item, index) => (
           <div key={index}>
             {item.image.map((src, idx) => (
@@ -58,12 +82,15 @@ const Index = () => {
                 key={idx}
                 className="relative h-20 overflow-hidden md:h-40 lg:h-60"
               >
-                <Image
-                  src={src}
-                  className="outline outline-1 outline-white"
-                  alt={`Image ${idx + 1}`}
-                  fill
-                />
+                <Link href={`/post/${item.id}`}>
+                  <Image
+                    src={src}
+                    className="outline outline-1 outline-white"
+                    alt={`Image ${idx + 1}`}
+                    priority
+                    fill
+                  />
+                </Link>
               </div>
             ))}
           </div>
