@@ -26,6 +26,7 @@ import { useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/components/ui/use-toast";
 import useEmblaCarousel from "embla-carousel-react";
+import LoginRequiredPage from "@/components/Login";
 
 const formSchema = z.object({
   title: z.string().min(1).max(100).default("Untitled Post"),
@@ -217,9 +218,7 @@ const Create = () => {
         </div>
       ) : (
         <div>
-          {
-            // TODO
-          }
+          <LoginRequiredPage />
         </div>
       )}
     </div>

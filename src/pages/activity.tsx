@@ -1,5 +1,6 @@
 "use client";
 
+import LoginRequiredPage from "@/components/Login";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { api } from "@/utils/api";
 import { signIn, useSession } from "next-auth/react";
@@ -38,7 +39,7 @@ const Activity = () => {
   });
 
   if (!sessionData?.user) {
-    signIn().catch((err) => console.log(err));
+    return <LoginRequiredPage />;
   }
   return (
     <div className="flex flex-col items-center justify-center gap-2">

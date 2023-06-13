@@ -16,9 +16,13 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <SessionProvider session={session}>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
 
-        <Component {...pageProps} />
-        <Toaster />
-        <SiteFooter />
+        <div className="bg-background">
+
+          <Component {...pageProps} />
+          <Toaster />
+          <SiteFooter />
+
+        </div>
       </ ThemeProvider >
 
     </SessionProvider>
