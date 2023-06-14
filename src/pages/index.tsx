@@ -305,15 +305,24 @@ export function Timeline({
           {isFetching && <PostSkeleton />}
           {posts.map((post) => {
             return (
-              <Post
+              <div
+
                 key={post.id}
-                post={post}
-                client={client}
-                input={{
-                  where,
-                  limit: LIMIT,
-                }}
-              />
+              >
+
+                <Post
+                  key={post.id}
+                  post={post}
+                  client={client}
+                  input={{
+                    where,
+                    limit: LIMIT,
+                  }}
+                />
+
+
+                {isFetching && <PostSkeleton />}
+              </div>
             );
           })}
 
