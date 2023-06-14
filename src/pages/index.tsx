@@ -302,27 +302,28 @@ export function Timeline({
     <div>
       <ScrollArea>
         <div className="w-full border-l-2 border-r-2 border-t-2 border-gray-500 md:p-20">
-          {isFetching && <PostSkeleton />}
+          {
+            isFetching && (<div>
+              {
+                // display the post skeleton a set number fo times 
+                Array(3).fill(0).map((_, index) => <PostSkeleton key={index} />)
+              }
+            </div>
+            )
+          }
           {posts.map((post) => {
             return (
-              <div
-
+              <Post
                 key={post.id}
-              >
-
-                <Post
-                  key={post.id}
-                  post={post}
-                  client={client}
-                  input={{
-                    where,
-                    limit: LIMIT,
-                  }}
-                />
+                post={post}
+                client={client}
+                input={{
+                  where,
+                  limit: LIMIT,
+                }}
+              />
 
 
-                {isFetching && <PostSkeleton />}
-              </div>
             );
           })}
 
