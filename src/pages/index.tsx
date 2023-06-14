@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @next/next/no-img-element */
 import { type RouterInputs, type RouterOutputs, api } from "@/utils/api";
 import Image from "next/image";
@@ -83,6 +84,64 @@ function updateCache({
   );
 }
 
+import { Skeleton } from "@/components/ui/skeleton";
+
+export function PostSkeleton() {
+  return (
+    <div className="flex flex-col space-y-4 p-10">
+      {/* Post Header */}
+      <div className="flex items-center justify-between">
+        {/* User info */}
+        <div className="flex items-center space-x-2">
+          {/* Profile Picture */}
+          <Skeleton className="h-12 w-12 rounded-full" />
+
+          {/* User Name */}
+          <Skeleton className="h-4 w-24" />
+        </div>
+
+        {/* More Icon */}
+        <Skeleton className="h-6 w-6 rounded" />
+      </div>
+
+      {/* Post Image */}
+      <div className="relative w-full">
+        <Skeleton className="h-64 w-full" />
+      </div>
+
+      {/* Post Actions (Like, Comment) */}
+      <div className="flex items-center justify-between">
+        {/* Like */}
+        <div className="flex items-center space-x-2">
+          <Skeleton className="h-6 w-6 rounded" />
+          <Skeleton className="h-4 w-8" />
+        </div>
+
+        {/* Comment */}
+        <div className="flex items-center space-x-2">
+          <Skeleton className="h-6 w-6 rounded" />
+          <Skeleton className="h-4 w-8" />
+        </div>
+      </div>
+
+      {/* Post Comments */}
+      <div className="flex flex-col space-y-2">
+        {/* Comment 1 */}
+        <div>
+          <Skeleton className="h-4 w-3/4" />
+          <Skeleton className="h-4 w-16" />
+        </div>
+
+        {/* Comment 2 */}
+        <div>
+          <Skeleton className="h-4 w-2/3" />
+          <Skeleton className="h-4 w-16" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const Post = React.memo(function Post({
   post,
   client,
@@ -95,8 +154,6 @@ const Post = React.memo(function Post({
   const { toast } = useToast();
 
   const [emblaRef] = useEmblaCarousel({ loop: false });
-  const [likeCount, setLikeCount] = useState(post._count.likes);
-  const [isLiked, setIsLiked] = useState(false);
   const likeMutation = api.post.like.useMutation({
     onSuccess: (data, variables) => {
       const userId = data.userId as string;
@@ -125,23 +182,6 @@ const Post = React.memo(function Post({
   }).mutateAsync;
 
   const hasLiked = post.likes.length > 0;
-  const handleLikeClick = (postId: string, hasLiked: boolean) => {
-    // Optimistically update the like count
-    setLikeCount(likeCount + (hasLiked ? -1 : 1));
-
-    if (isLiked) {
-      unlikeMutation({ postId }).catch(() => {
-        console.log("error");
-      });
-      setIsLiked(false);
-      return;
-    }
-
-    likeMutation({ postId }).catch(() => {
-      console.log("error");
-    });
-    setIsLiked(true);
-  };
   return (
     <div className="flex flex-col p-10 ">
       <div className="flex items-center justify-between">
@@ -188,11 +228,22 @@ const Post = React.memo(function Post({
       <div className="flex items-center justify-between">
         <div className="mt-4 flex items-center p-2">
           <ThumbsUpIcon
-            color={isLiked || hasLiked ? "red" : "gray"}
+            color={hasLiked ? "red" : "gray"}
             size="1.5rem"
-            onClick={() => handleLikeClick(post.id, hasLiked)}
+            onClick={() => {
+              if (hasLiked) {
+                unlikeMutation({
+                  postId: post.id,
+                });
+                return;
+              }
+
+              likeMutation({
+                postId: post.id,
+              });
+            }}
           />
-          <span className="text-sm text-gray-500">{likeCount}</span>
+          <span className="text-sm text-gray-500">{post._count.likes}</span>
         </div>
         <div className="mt-4 flex items-center p-2">
           <Link href={`/post/${post.id}`}>
@@ -251,6 +302,7 @@ export function Timeline({
     <div>
       <ScrollArea>
         <div className="w-full border-l-2 border-r-2 border-t-2 border-gray-500 md:p-20">
+          {isFetching && <PostSkeleton />}
           {posts.map((post) => {
             return (
               <Post
