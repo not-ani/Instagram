@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import Link from "next/link"
 import Image from "next/image"
@@ -10,6 +11,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { MessageCircle, MoreHorizontalIcon, ThumbsUpIcon } from "lucide-react";
+import { PostSkeleton } from "@/components/skeletons";
 
 const Post = React.memo(function Post({
   post,
@@ -85,7 +87,7 @@ const Post = React.memo(function Post({
         <div className="flex">
           {post?.image.map((src, index) => (
             <div className="relative w-full" key={index}>
-              <Image
+              <img
                 src={src}
                 alt={`Slide ${index}`}
                 className="w-full object-cover"
@@ -139,6 +141,7 @@ const Index = () => {
   if (!post.data) {
     return null;
   }
+  if (post.isFetching) return <PostSkeleton />
 
   return <div>
     <Post post={post.data} />

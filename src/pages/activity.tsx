@@ -7,12 +7,46 @@ import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
 
+import { Skeleton } from "@/components/ui/skeleton"
+
+export function ActivitySkeleton() {
+  return (
+    <div className="flex flex-col items-center justify-center gap-2">
+      {/* Activity Heading */}
+      <Skeleton className="h-8 w-32" />
+
+      {/* Activities list */}
+      {Array(5).fill(0).map((_, index) => (
+        <div
+          key={index}
+          className="flex flex-row items-center justify-center gap-2"
+        >
+          {/* Avatar */}
+          <Skeleton className="h-10 w-10 rounded-full" />
+
+          {/* User Name */}
+          <Skeleton className="h-4 w-20" />
+
+          {/* Activity Type */}
+          <Skeleton className="h-4 w-32" />
+
+          {/* Post Title */}
+          <Skeleton className="h-4 w-24" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 const Activity = () => {
   const { data: sessionData } = useSession();
   const data = api.user.getActivity.useQuery();
   // mix likes and comments and sort by date
   if (!data.data) {
     return null;
+  }
+  if (data.isLoading) {
+    return <ActivitySkeleton />
   }
   if (!data.data?.likes && !data.data?.comments) {
     return (

@@ -9,6 +9,58 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 const LIMIT = 12;
 
+import { Skeleton } from "@/components/ui/skeleton"
+
+export function IndexSkeleton() {
+  return (
+    <div className="flex flex-col py-10 space-y-4">
+      {/* User Info */}
+      <div className="flex justify-around">
+        <div></div>
+        {/* User Name */}
+        <Skeleton className="h-8 w-32" />
+        {/* Menu Icon */}
+        <Skeleton className="h-8 w-8 rounded" />
+      </div>
+
+      {/* Avatar and User Stats */}
+      <div className="flex items-center justify-around gap-2 py-5 sm:gap-10 ">
+        {/* Avatar */}
+        <Skeleton className="h-20 w-20 sm:h-32 sm:w-32 rounded-full" />
+
+        {/* User Stats */}
+        <div className="flex flex-col space-y-2">
+          <Skeleton className="h-4 w-16" />
+          <Skeleton className="h-4 w-8" />
+        </div>
+        <div className="flex flex-col space-y-2">
+          <Skeleton className="h-4 w-16" />
+          <Skeleton className="h-4 w-8" />
+        </div>
+        <div className="flex flex-col space-y-2">
+          <Skeleton className="h-4 w-16" />
+          <Skeleton className="h-4 w-8" />
+        </div>
+      </div>
+
+      {/* User Description */}
+      <div className="flex flex-col justify-around px-10 space-y-2">
+        <Skeleton className="h-4 w-24" />
+        <Skeleton className="h-4 w-full" />
+      </div>
+
+      {/* User Images */}
+      <div className="grid grid-cols-3 gap-1 px-10 py-20 sm:grid-cols-5 md:grid-cols-6">
+        {Array(9).fill(0).map((_, index) => (
+          <div key={index} className="relative h-20 overflow-hidden md:h-40 lg:h-60">
+            <Skeleton className="h-full w-full" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 const Index = () => {
   const router = useRouter();
   const { id } = router.query;
@@ -41,6 +93,9 @@ const Index = () => {
       });
     }
   }, [scrollPosition, hasNextPage, isFetching, fetchNextPage]);
+  if (isFetching || user.isFetching) {
+    return <IndexSkeleton />
+  }
 
   return (
     <div className="flex flex-col py-10">
